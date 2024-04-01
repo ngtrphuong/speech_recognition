@@ -20,6 +20,7 @@ import hashlib
 import hmac
 import time
 import uuid
+from security import safe_command
 
 __author__ = "Anthony Zhang (Uberi)"
 __version__ = "3.8.1"
@@ -259,7 +260,7 @@ class AudioFile(AudioSource):
                     startup_info.wShowWindow = subprocess.SW_HIDE  # specify that the console window should be hidden
                 else:
                     startup_info = None  # default startupinfo
-                process = subprocess.Popen([
+                process = safe_command.run(subprocess.Popen, [
                     flac_converter,
                     "--stdout", "--totally-silent",  # put the resulting AIFF file in stdout, and make sure it's not mixed with any program output
                     "--decode", "--force-aiff-format",  # decode the FLAC file into an AIFF file
@@ -486,7 +487,7 @@ class AudioData(object):
             startup_info.wShowWindow = subprocess.SW_HIDE  # specify that the console window should be hidden
         else:
             startup_info = None  # default startupinfo
-        process = subprocess.Popen([
+        process = safe_command.run(subprocess.Popen, [
             flac_converter,
             "--stdout", "--totally-silent",  # put the resulting FLAC file in stdout, and make sure it's not mixed with any program output
             "--best",  # highest level of compression available
